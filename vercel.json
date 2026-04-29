@@ -2,8 +2,5 @@
   "framework": "nextjs",
   "buildCommand": "pnpm prisma generate && pnpm build",
   "installCommand": "pnpm install",
-  "outputDirectory": ".next",
-  "env": {
-    "DATABASE_URL": "@database_url"
-  }
+  "outputDirectory": ".next"
 }
