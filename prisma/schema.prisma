@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model LearningDomain {
+  id           String    @id @default(cuid())
+  title        String
+  description  String
+  coverKeyword String
+  color        String
+  topics       Topic[]
+  projects     Project[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Topic {
+  id        String         @id @default(cuid())
+  title     String
+  completed Boolean        @default(false)
+  order     Int
+  notes     String         @default("")
+  domainId  String
+  domain    LearningDomain @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model HabitLog {
+  id        String      @id @default(cuid())
+  habitType HabitType
+  date      String
+  done      Boolean     @default(true)
+  notes     String      @default("")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@unique([habitType, date])
+}
+
+model Project {
+  id          String         @id @default(cuid())
+  title       String
+  description String         @default("")
+  status      ProjectStatus  @default(TODO)
+  domainId    String
+  domain      LearningDomain @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+enum HabitType {
+  BOXING
+  GUITAR
+}
+
+enum ProjectStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
